@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 8001:80
+    volumes:
+      - ./data/wordpress/html:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: MxredminexM
+
+  db:
+    image: mysql@sha256:360d1924d86cbf416f2c84687c2037e153080fed932798a73c5c6b4ceb7399e9
+    restart: always
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./data/mysql/var:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Passw0rd 
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: MxredminexM
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8002:8080
