@@ -3,10 +3,9 @@ version: '3.8'
 services:
 
   wordpress:
-    image: wordpress
+    build: ./php7.4-fpm
+    container_name: wordpress
     restart: always
-    ports:
-      - 8001:80
     volumes:
       - ./data/wordpress/html:/var/www/html
     environment:
@@ -14,7 +13,20 @@ services:
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: MxredminexM
-
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./data/nginx/conf.d:/etc/nginx/conf.d
+ #     - ./logs/nginx:/var/log/nginx
+      - ./data/wordpress:/var/www/html
+ #     - ./data/ssl:/var/www/ssl
+    links:
+     - wordpress
   db:
     image: mysql@sha256:360d1924d86cbf416f2c84687c2037e153080fed932798a73c5c6b4ceb7399e9
     restart: always
